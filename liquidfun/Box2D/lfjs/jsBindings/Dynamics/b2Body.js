@@ -112,6 +112,7 @@ b2Body.prototype.CreateFixtureFromDef = function(fixtureDef) {
   fixture.body = this;
   b2World._Push(fixture, this.fixtures);
   this.world.fixturesLookup[fixture.ptr] = fixture;
+  fixture.SetFilterData(fixtureDef.filter);
   return fixture;
 };
 
