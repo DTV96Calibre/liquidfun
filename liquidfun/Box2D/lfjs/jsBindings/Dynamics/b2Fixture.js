@@ -53,6 +53,7 @@ b2Fixture.prototype.SetFilterData = function(filter) {
 
 b2Fixture.prototype.SetSensor = function(flag) {
   this.buffer.setUint32(b2Fixture_isSensor_offset, flag, true);
+  this.isSensor = !!flag;
 };
 
 b2Fixture.prototype.Refilter = function() {
