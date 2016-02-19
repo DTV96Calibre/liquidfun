@@ -10,7 +10,7 @@ void* b2ChainShape_CreateFixture(
     // filter
     double categoryBits, double groupIndex, double maskBits,
     // chain
-    float* vertices, double length) {
+    float* vertices, double length, double hasPrevVertex, double hasNextVertex) {
   b2FixtureDef def;
   def.density = density;
   def.friction = friction;
@@ -24,10 +24,31 @@ void* b2ChainShape_CreateFixture(
   b2ChainShape chain;
   int count = length / 2;
   b2Vec2 vertexArr[MaxChainVertices];
-  for (int i = 0, j = 0; i < length; i += 2, j++) {
+  
+  if ((bool)hasPrevVertex)
+  {
+    count--;
+  }
+  if ((bool)hasNextVertex)
+  {
+    count--;
+  }
+  
+  for (int i = 0, j = 0; j < count; i += 2, j++) {
     vertexArr[j] = b2Vec2(vertices[i], vertices[i+1]);
   }
   chain.CreateChain(vertexArr, count);
+
+  if ((bool)hasPrevVertex)
+  {
+    chain.SetPrevVertex(b2Vec2(vertices[2*count], vertices[(2*count)+1]));
+    count++;
+  }
+  if ((bool)hasNextVertex)
+  {
+    chain.SetNextVertex(b2Vec2(vertices[2*count], vertices[(2*count)+1]));
+    count++;
+  }
 
   def.shape = &chain;
   return ((b2Body*)body)->CreateFixture(&def);

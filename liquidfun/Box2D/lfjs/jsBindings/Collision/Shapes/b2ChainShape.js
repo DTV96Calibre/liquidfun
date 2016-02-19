@@ -5,17 +5,21 @@ var b2ChainShape_CreateFixture =
       'number', 'number', 'number',
       'number', 'number',
       // Chain vertices and count
-      'number', 'number']);
+      'number', 'number', 'number', 'number']);
 
 /**@constructor*/
 function b2ChainShape() {
   this.radius = b2_polygonRadius;
   this.vertices = [];
   this.type = b2Shape_Type_e_chain;
+  this.prevVertex = null;
+  this.nextVertex = null;
 }
 
 b2ChainShape.prototype.CreateLoop = function() {
    this.vertices.push(this.vertices[0]);
+   this.prevVertex = this.vertices[this.vertices.length - 2];
+   this.nextVertex = this.vertices[1];
 };
 
 // TODO Optimize this
@@ -23,11 +27,32 @@ b2ChainShape.prototype._CreateFixture = function(body, fixtureDef) {
   var vertices = this.vertices;
   var chainLength = vertices.length;
   var dataLength = chainLength * 2;
+  if (this.prevVertex)
+  {
+    dataLength += 2;
+  }
+  if (this.nextVertex)
+  {
+    dataLength += 2;
+  }
   var data = new Float32Array(dataLength);
 
-  for (var i = 0, j = 0; i < dataLength; i += 2, j++) {
+  for (var i = 0, j = 0; j < chainLength; i += 2, j++) {
     data[i] = vertices[j].x;
     data[i+1] = vertices[j].y;
+  }
+  
+  if (this.prevVertex)
+  {
+    data[2*chainLength] = this.prevVertex.x;
+    data[2*chainLength+1] = this.prevVertex.y;
+    chainLength++;
+  }
+  if (this.nextVertex)
+  {
+    data[2*chainLength] = this.nextVertex.x;
+    data[2*chainLength+1] = this.nextVertex.y;
+    chainLength++;
   }
 
   // Get data byte size, allocate memory on Emscripten heap, and get pointer
@@ -46,7 +71,7 @@ b2ChainShape.prototype._CreateFixture = function(body, fixtureDef) {
     // filter def
     fixtureDef.filter.categoryBits, fixtureDef.filter.groupIndex, fixtureDef.filter.maskBits,
     // vertices and length
-    dataHeap.byteOffset, data.length);
+    dataHeap.byteOffset, data.length, !!this.prevVertex, !!this.nextVertex);
 
   // Free memory
   Module._free(dataHeap.byteOffset);
