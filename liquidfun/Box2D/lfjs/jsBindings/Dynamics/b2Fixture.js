@@ -7,6 +7,7 @@ function b2Filter() {
 
 // fixture globals
 var b2Fixture_isSensor_offset = Offsets.b2Fixture.isSensor;
+var b2Fixture_friction_offset = Offsets.b2Fixture.friction;
 var b2Fixture_userData_offset = Offsets.b2Fixture.userData;
 var b2Fixture_filter_categoryBits_offset = Offsets.b2Fixture.filterCategoryBits;
 var b2Fixture_filter_maskBits_offset = Offsets.b2Fixture.filterMaskBits;
@@ -49,6 +50,11 @@ b2Fixture.prototype.SetFilterData = function(filter) {
   this.buffer.setUint16(b2Fixture_filter_maskBits_offset, filter.maskBits, true);
   this.buffer.setUint16(b2Fixture_filter_groupIndex_offset, filter.groupIndex, true);
   this.Refilter();
+};
+
+b2Fixture.prototype.SetFriction = function(friction) {
+  this.buffer.setFloat32(b2Fixture_friction_offset, friction, true);
+  this.friction = friction;
 };
 
 b2Fixture.prototype.SetSensor = function(flag) {
