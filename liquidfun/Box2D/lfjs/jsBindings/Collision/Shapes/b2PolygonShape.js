@@ -262,7 +262,7 @@ b2PolygonShape.prototype._CreateFixture = function(body, fixtureDef) {
         v4.x, v4.y,
         v5.x, v5.y,
         v6.x, v6.y,
-        v6.x, v7.y);
+        v7.x, v7.y);
       break;
 
   }
