@@ -87,7 +87,8 @@ B2BODY = \
 	'_b2Body_SetLinearVelocity', \
 	'_b2Body_SetMassData', \
 	'_b2Body_SetTransform', \
-	'_b2Body_SetType'
+	'_b2Body_SetType', \
+	'_b2Body_SetBullet'
 
 B2CHAINSHAPE = \
 	'_b2ChainShape_CreateFixture'
