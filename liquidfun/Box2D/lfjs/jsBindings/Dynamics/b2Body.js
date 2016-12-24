@@ -73,6 +73,9 @@ var b2Body_SetTransform =
 var b2Body_SetType =
   Module.cwrap('b2Body_SetType', 'null', ['number', 'number']);
 
+var b2Body_SetBullet =
+  Module.cwrap('b2Body_SetBullet', 'null', ['number', 'number']);
+
 
 // memory offsets
 var b2Body_xf_offset = Offsets.b2Body.xf;
@@ -234,6 +237,11 @@ b2Body.prototype.SetTransform = function(v, angle) {
 
 b2Body.prototype.SetType = function(type) {
   b2Body_SetType(this.ptr, type);
+};
+
+b2Body.prototype.SetBullet = function(bullet) {
+  b2Body_SetBullet(this.ptr, bullet);
+  this.bullet = !!bullet;
 };
 
 // General body globals

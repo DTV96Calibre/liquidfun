@@ -33,5 +33,6 @@ void b2Body_SetMassData(void* body, double mass, double centerX,
                         double centerY, double inertia);
 void b2Body_SetTransform(void* body, double x, double y, double angle);
 void b2Body_SetType(void* body, double type);
+void b2Body_SetBullet(void* body, bool bullet);
 }
 #endif
