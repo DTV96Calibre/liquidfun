@@ -34,6 +34,7 @@ $(O)/Dynamics/Joints/b2Joint.cpp \
 $(O)/Dynamics/Joints/b2RevoluteJoint.cpp \
 $(O)/Dynamics/Joints/b2WheelJoint.cpp \
 $(O)/Dynamics/Joints/b2PulleyJoint.cpp \
+$(O)/Dynamics/Joints/b2XformWeldJoint.cpp \
 $(O)/Dynamics/Contacts/b2ChainAndPolygonContact.cpp \
 $(O)/Dynamics/Contacts/b2Contact.cpp \
 $(O)/Dynamics/Contacts/b2PolygonAndCircleContact.cpp \
@@ -209,6 +210,10 @@ B2WHEELJOINT = \
 	'_b2WheelJointDef_Create', \
 	'_b2WheelJointDef_InitializeAndCreate' \
 
+B2XFORMWELDJOINT = \
+	'_b2XformWeldJointDef_Create', \
+	'_b2XformWeldJointDef_InitializeAndCreate' \
+
 B2WORLD = \
 	'_b2World_Create', \
 	'_b2World_CreateBody', \
@@ -247,6 +252,7 @@ EXPORTS = EXPORTED_FUNCTIONS="[ \
 	$(B2ROPEJOINT), \
 	$(B2WELDJOINT), \
 	$(B2WHEELJOINT), \
+	$(B2XFORMWELDJOINT), \
 	$(B2WORLD) \
 	]"
 

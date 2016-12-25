@@ -24,6 +24,7 @@ java -jar $CLOSURE_JAR --language_in ECMASCRIPT5 \
 ./jsBindings/Dynamics/Joints/b2PrismaticJoint.js \
 ./jsBindings/Dynamics/Joints/b2RopeJoint.js \
 ./jsBindings/Dynamics/Joints/b2MouseJoint.js \
+./jsBindings/Dynamics/Joints/b2XformWeldJoint.js \
 ./jsBindings/Dynamics/Contacts/b2Contact.js \
 ./jsBindings/Dynamics/b2Fixture.js \
 ./jsBindings/Dynamics/b2WorldCallbacks.js \

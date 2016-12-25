@@ -10,6 +10,7 @@ var e_weldJoint = 8;
 var e_frictionJoint = 9;
 var e_ropeJoint = 10;
 var e_motorJoint = 11;
+var e_xformWeldJoint = 12;
 
 var b2Joint_GetBodyA = Module.cwrap('b2Joint_GetBodyA', 'number', ['number']);
 var b2Joint_GetBodyB = Module.cwrap('b2Joint_GetBodyB', 'number', ['number']);

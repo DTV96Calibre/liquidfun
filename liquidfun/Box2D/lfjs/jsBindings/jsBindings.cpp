@@ -22,6 +22,7 @@ extern "C" {
 #include "Dynamics/Joints/b2RopeJointJsBindings.h"
 #include "Dynamics/Joints/b2WeldJointJsBindings.h"
 #include "Dynamics/Joints/b2WheelJointJsBindings.h"
+#include "Dynamics/Joints/b2XformWeldJointJsBindings.h"
 #include "Particle/b2ParticleGroupJsBindings.h"
 #include "Particle/b2ParticleSystemJsBindings.h"
 void GenerateOffsets();
@@ -47,6 +48,7 @@ void GenerateOffsets();
 #include "Dynamics/Joints/b2RopeJointJsBindings.cpp"
 #include "Dynamics/Joints/b2WeldJointJsBindings.cpp"
 #include "Dynamics/Joints/b2WheelJointJsBindings.cpp"
+#include "Dynamics/Joints/b2XformWeldJointJsBindings.cpp"
 #include "Particle/b2ParticleGroupJsBindings.cpp"
 #include "Particle/b2ParticleSystemJsBindings.cpp"
 
