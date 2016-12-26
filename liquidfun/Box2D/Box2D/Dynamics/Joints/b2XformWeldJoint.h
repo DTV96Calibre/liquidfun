@@ -36,10 +36,6 @@ struct b2XformWeldJointDef : public b2JointDef
 		dampingRatio = 0.0f;
 	}
 
-	/// Initialize the bodies, anchors, and reference angle using a world
-	/// anchor point.
-	void Initialize(b2Body* bodyA, b2Body* bodyB, const b2Vec2& anchor);
-
 	/// The local anchor point relative to bodyA's origin.
 	b2Vec2 localAnchorA;
 

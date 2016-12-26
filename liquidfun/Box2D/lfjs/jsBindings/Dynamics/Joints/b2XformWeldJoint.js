@@ -7,17 +7,6 @@ var b2XformWeldJointDef_Create = Module.cwrap("b2XformWeldJointDef_Create",
     'number', 'number', 'number',
     'number', 'number', 'number']);
 
-var b2XformWeldJointDef_InitializeAndCreate = Module.cwrap("b2XformWeldJointDef_InitializeAndCreate",
-  'number',
-  ['number',
-    // initialize args
-    'number', 'number', 'number',
-    'number',
-    // joint def
-    'number',
-    // weld joint def
-    'number', 'number']);
-
 /** @constructor */
 function b2XformWeldJointDef() {
   // joint def

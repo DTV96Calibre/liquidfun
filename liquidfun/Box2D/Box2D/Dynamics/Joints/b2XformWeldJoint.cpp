@@ -34,15 +34,6 @@
 // J = [0 0 -1 0 0 1]
 // K = invI1 + invI2
 
-void b2XformWeldJointDef::Initialize(b2Body* bA, b2Body* bB, const b2Vec2& anchor)
-{
-	bodyA = bA;
-	bodyB = bB;
-	localAnchorA = bodyA->GetLocalPoint(anchor);
-	localAnchorB = bodyB->GetLocalPoint(anchor);
-	referenceAngle = bodyB->GetAngle() - bodyA->GetAngle();
-}
-
 b2XformWeldJoint::b2XformWeldJoint(const b2XformWeldJointDef* def)
 : b2Joint(def)
 {

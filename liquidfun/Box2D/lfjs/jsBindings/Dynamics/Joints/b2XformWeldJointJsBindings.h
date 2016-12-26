@@ -10,16 +10,6 @@ void* b2XformWeldJointDef_Create(
     double dampingRatio, double frequencyHz, double localAnchorAx,
     double localAnchorAy, double localAnchorBx, double localAnchorBy,
     double referenceAngle);
-
-void* b2XformWeldJointDef_InitializeAndCreate(
-    void* world,
-    // initialize args
-    void* bodyA, void* bodyB, double anchorX,
-    double anchorY,
-    // joint def
-    double collideConnected,
-    // weld joint def
-    double dampingRatio, double frequencyHz);
 }
 
 #endif

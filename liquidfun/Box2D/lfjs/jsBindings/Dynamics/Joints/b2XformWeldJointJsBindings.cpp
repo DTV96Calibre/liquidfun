@@ -20,23 +20,3 @@ void* b2XformWeldJointDef_Create(
 
   return ((b2World*)world)->CreateJoint(&def);
 }
-
-void* b2XformWeldJointDef_InitializeAndCreate(
-    void* world,
-    // initialize args
-    void* bodyA, void* bodyB, double anchorX,
-    double anchorY,
-    // joint def
-    double collideConnected,
-    // weld joint def
-    double dampingRatio, double frequencyHz) {
-  b2XformWeldJointDef def;
-  def.collideConnected = collideConnected;
-
-  def.dampingRatio = dampingRatio;
-  def.frequencyHz = frequencyHz;
-
-  def.Initialize((b2Body*)bodyA, (b2Body*)bodyB, b2Vec2(anchorX, anchorY));
-
-  return ((b2World*)world)->CreateJoint(&def);
-}

@@ -211,8 +211,7 @@ B2WHEELJOINT = \
 	'_b2WheelJointDef_InitializeAndCreate' \
 
 B2XFORMWELDJOINT = \
-	'_b2XformWeldJointDef_Create', \
-	'_b2XformWeldJointDef_InitializeAndCreate' \
+	'_b2XformWeldJointDef_Create'
 
 B2WORLD = \
 	'_b2World_Create', \
