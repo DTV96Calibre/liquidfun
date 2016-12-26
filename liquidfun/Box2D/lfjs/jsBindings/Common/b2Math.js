@@ -250,6 +250,12 @@ b2Mat33.Multiply = function(a, b) {
   }
 };
 
+b2Mat33.Multiply22 = function(a, b) {
+  //Multiplying by vector, ignoring translation
+  return new b2Vec2(a.a*b.x + a.d*b.y,
+                    a.b*b.x + a.e*b.y);
+};
+
 b2Mat33.Inverse = function(M) {
   var A = (M.e*M.i - M.h*M.f);
   var B = -(M.b*M.i - M.h*M.c);
@@ -274,6 +280,10 @@ b2Mat33.Inverse = function(M) {
 
 b2Mat33.prototype.Multiply = function(other) {
   return b2Mat33.Multiply(this, other);
+};
+
+b2Mat33.prototype.Multiply22 = function(other) {
+  return b2Mat33.Multiply22(this, other);
 };
 
 b2Mat33.prototype.Translate = function(x, y) {
