@@ -1,7 +1,6 @@
 @echo off
 java -jar %CLOSURE_JAR% --language_in ECMASCRIPT5 ^
---compilation_level WHITESPACE_ONLY ^
-./lf_core.js ^
+--compilation_level SIMPLE ^
 ./jsBindings/offsets.js ^
 ./jsBindings/Common/b2Math.js ^
 ./jsBindings/Collision/b2Collision.js ^
@@ -31,4 +30,9 @@ java -jar %CLOSURE_JAR% --language_in ECMASCRIPT5 ^
 ./jsBindings/Particle/b2ParticleSystem.js ^
 ./jsBindings/Particle/b2ParticleGroup.js ^
 ./jsBindings/Particle/b2Particle.js ^
+--js_output_file bindings.js
+java -jar %CLOSURE_JAR% --language_in ECMASCRIPT5 ^
+--compilation_level WHITESPACE_ONLY ^
+./lf_core.js ^
+./bindings.js ^
 --js_output_file liquidfun.js
