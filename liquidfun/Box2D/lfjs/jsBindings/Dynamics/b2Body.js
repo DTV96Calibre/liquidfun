@@ -51,6 +51,9 @@ var b2Body_GetWorldPoint = Module.cwrap('b2Body_GetWorldPoint', 'null',
 var b2Body_GetWorldVector = Module.cwrap('b2Body_GetWorldVector', 'null',
   ['number', 'number', 'number', 'number']);
 
+var b2Body_GetMassData = Module.cwrap('b2Body_GetMassData', 'null',
+  ['number', 'number']);
+
 var b2Body_SetAngularVelocity = Module.cwrap('b2Body_SetAngularVelocity', 'null',
   ['number', 'number']);
 
@@ -209,6 +212,14 @@ b2Body.prototype.GetWorldVector = function(vec) {
   b2Body_GetWorldVector(this.ptr, vec.x, vec.y, _vec2Buf.byteOffset);
   var result = new Float32Array(_vec2Buf.buffer, _vec2Buf.byteOffset, _vec2Buf.length);
   return new b2Vec2(result[0], result[1]);
+};
+
+b2Body.prototype.GetMassData = function() {
+  b2Body_GetMassData(this.ptr, _transBuf.byteOffset);
+  var result = new Float32Array(_transBuf.buffer, _transBuf.byteOffset, _transBuf.length);
+  return {mass: result[0],
+          center: new b2Vec2(result[1], result[2]),
+          I: result[3]};
 };
 
 b2Body.prototype.SetAngularVelocity = function(angle) {

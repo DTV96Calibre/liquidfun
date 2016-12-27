@@ -82,6 +82,7 @@ B2BODY = \
 	'_b2Body_GetWorldCenter', \
 	'_b2Body_GetWorldPoint', \
 	'_b2Body_GetWorldVector', \
+	'_b2Body_GetMassData', \
 	'_b2Body_SetAngularVelocity', \
 	'_b2Body_SetAwake', \
 	'_b2Body_SetFixedRotation', \

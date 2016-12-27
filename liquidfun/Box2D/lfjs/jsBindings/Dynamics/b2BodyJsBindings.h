@@ -25,6 +25,7 @@ void b2Body_GetTransform(void* body, float* arr);
 void b2Body_GetWorldCenter(void* body, float* arr);
 void b2Body_GetWorldPoint(void* body, double pointX, double pointY, float* arr);
 void b2Body_GetWorldVector(void* body, double vX, double vY, float* arr);
+void b2Body_GetMassData(void* body, float* arr);
 void b2Body_SetAngularVelocity(void* body, double angle);
 void b2Body_SetAwake(void* body, double flag);
 void b2Body_SetFixedRotation(void* body, double flag);

@@ -98,6 +98,10 @@ void b2Body_GetWorldVector(void* body, double vX, double vY, float* arr) {
   arr[1] = worldVec.y;
 }
 
+void b2Body_GetMassData(void* body, float* arr) {
+  ((b2Body*)body)->GetMassData(reinterpret_cast<b2MassData*>(arr));
+}
+
 void b2Body_SetAwake(void* body, double flag) {
   ((b2Body*)body)->SetAwake((bool)flag);
 }
