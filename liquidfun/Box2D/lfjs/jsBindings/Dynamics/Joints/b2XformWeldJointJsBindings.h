@@ -13,7 +13,8 @@ void* b2XformWeldJointDef_Create(
     // transform
     double transformB_a, double transformB_b, double transformB_c,
     double transformB_d, double transformB_e, double transformB_f,
-    double transformB_g, double transformB_h, double transformB_i);
+    double transformB_g, double transformB_h, double transformB_i,
+    double transformBRot_x, double transformBRot_y);
 }
 
 #endif

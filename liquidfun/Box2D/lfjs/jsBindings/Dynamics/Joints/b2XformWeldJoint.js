@@ -9,7 +9,8 @@ var b2XformWeldJointDef_Create = Module.cwrap("b2XformWeldJointDef_Create",
     //transform
     'number', 'number', 'number',
     'number', 'number', 'number',
-    'number', 'number', 'number']);
+    'number', 'number', 'number',
+    'number', 'number']);
     
 /** @constructor */
 function b2XformWeldJointDef() {
@@ -27,6 +28,7 @@ function b2XformWeldJointDef() {
   
   // Transform
   this.transformB = b2Mat33.Identity();
+  this.transformBRot = new b2Vec2(1, 0);
 }
 
 b2XformWeldJointDef.prototype.Create = function(world) {
@@ -42,7 +44,8 @@ b2XformWeldJointDef.prototype.Create = function(world) {
     // transform
     this.transformB.a, this.transformB.b, this.transformB.c,
     this.transformB.d, this.transformB.e, this.transformB.f,
-    this.transformB.g, this.transformB.h, this.transformB.i);
+    this.transformB.g, this.transformB.h, this.transformB.i,
+    this.transformBRot.x, this.transformBRot.y);
   weldJoint.buffer = new DataView(Module.HEAPU8.buffer, weldJoint.ptr);
   return weldJoint;
 };

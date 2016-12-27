@@ -54,6 +54,9 @@ struct b2XformWeldJointDef : public b2JointDef
 	
 	/// The transformation to convert from bodyA's origin to bodyB's origin.
 	b2Mat33 transformB;
+	
+	/// The rotation transform to convert from bodyA's origin to bodyB's origin.
+	b2Vec2 transformBRot;
 };
 
 /// A weld joint essentially glues two bodies together. A weld joint may
@@ -85,8 +88,12 @@ public:
 	float32 GetDampingRatio() const { return m_dampingRatio; }
 	
 	/// Set/get transform matrices.
-	void SetTransformB(const b2Mat33& transform) { m_transformAtoB = transform; transform.GetInverse33(&m_transformBtoA); }
+	void SetTransformB(const b2Mat33& transform);
 	const b2Mat33& GetTransformB() const { return m_transformAtoB; }
+	
+	/// Set/get rotation transform.
+	void SetTransformBRot(const b2Vec2& transform);
+	const b2Vec2& GetTransformBRot() const { return m_rotateAtoB; }
 
 	/// Dump to b2Log
 	void Dump();
@@ -113,6 +120,8 @@ protected:
 	b2Vec3 m_impulse;
 	b2Mat33 m_transformAtoB;
 	b2Mat33 m_transformBtoA;
+	b2Vec2 m_rotateAtoB;
+	b2Vec2 m_rotateBtoA;
 
 	// Solver temp
 	int32 m_indexA;

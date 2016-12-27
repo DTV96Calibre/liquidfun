@@ -45,6 +45,7 @@ b2XformWeldJoint::b2XformWeldJoint(const b2XformWeldJointDef* def)
 
 	m_impulse.SetZero();
 	SetTransformB(def->transformB);
+	SetTransformBRot(def->transformBRot);
 }
 
 void b2XformWeldJoint::InitVelocityConstraints(const b2SolverData& data)
@@ -62,9 +63,9 @@ void b2XformWeldJoint::InitVelocityConstraints(const b2SolverData& data)
 	b2Vec2 vA = data.velocities[m_indexA].v;
 	float32 wA = data.velocities[m_indexA].w;
 
-	float32 aB = data.positions[m_indexB].a;
-	b2Vec2 vB = data.velocities[m_indexB].v;
-	float32 wB = data.velocities[m_indexB].w;
+	float32 aB = data.positions[m_indexB].a * m_rotateBtoA.x + m_rotateBtoA.y;
+	b2Vec2 vB = b2Mul22(m_transformBtoA, data.velocities[m_indexB].v);
+	float32 wB = data.velocities[m_indexB].w * m_rotateBtoA.x;
 
 	b2Rot qA(aA), qB(aB);
 
@@ -148,16 +149,16 @@ void b2XformWeldJoint::InitVelocityConstraints(const b2SolverData& data)
 
 	data.velocities[m_indexA].v = vA;
 	data.velocities[m_indexA].w = wA;
-	data.velocities[m_indexB].v = vB;
-	data.velocities[m_indexB].w = wB;
+	data.velocities[m_indexB].v = b2Mul22(m_transformAtoB, vB);
+	data.velocities[m_indexB].w = wB * m_rotateAtoB.x;
 }
 
 void b2XformWeldJoint::SolveVelocityConstraints(const b2SolverData& data)
 {
 	b2Vec2 vA = data.velocities[m_indexA].v;
 	float32 wA = data.velocities[m_indexA].w;
-	b2Vec2 vB = data.velocities[m_indexB].v;
-	float32 wB = data.velocities[m_indexB].w;
+	b2Vec2 vB = b2Mul22(m_transformBtoA, data.velocities[m_indexB].v);
+	float32 wB = data.velocities[m_indexB].w * m_rotateBtoA.x;
 
 	float32 mA = m_invMassA, mB = m_invMassB;
 	float32 iA = m_invIA, iB = m_invIB;
@@ -206,16 +207,16 @@ void b2XformWeldJoint::SolveVelocityConstraints(const b2SolverData& data)
 
 	data.velocities[m_indexA].v = vA;
 	data.velocities[m_indexA].w = wA;
-	data.velocities[m_indexB].v = vB;
-	data.velocities[m_indexB].w = wB;
+	data.velocities[m_indexB].v = b2Mul22(m_transformAtoB, vB);
+	data.velocities[m_indexB].w = wB * m_rotateAtoB.x;
 }
 
 bool b2XformWeldJoint::SolvePositionConstraints(const b2SolverData& data)
 {
 	b2Vec2 cA = data.positions[m_indexA].c;
 	float32 aA = data.positions[m_indexA].a;
-	b2Vec2 cB = data.positions[m_indexB].c;
-	float32 aB = data.positions[m_indexB].a;
+	b2Vec2 cB = b2Mul33(m_transformBtoA, data.positions[m_indexB].c);
+	float32 aB = data.positions[m_indexB].a * m_rotateBtoA.x + m_rotateBtoA.y;
 
 	b2Rot qA(aA), qB(aB);
 
@@ -275,8 +276,8 @@ bool b2XformWeldJoint::SolvePositionConstraints(const b2SolverData& data)
 
 	data.positions[m_indexA].c = cA;
 	data.positions[m_indexA].a = aA;
-	data.positions[m_indexB].c = cB;
-	data.positions[m_indexB].a = aB;
+	data.positions[m_indexB].c = b2Mul33(m_transformAtoB, cB);
+	data.positions[m_indexB].a = aB * m_rotateAtoB.x + m_rotateAtoB.y;
 
 	return positionError <= b2_linearSlop && angularError <= b2_angularSlop;
 }
@@ -300,6 +301,27 @@ b2Vec2 b2XformWeldJoint::GetReactionForce(float32 inv_dt) const
 float32 b2XformWeldJoint::GetReactionTorque(float32 inv_dt) const
 {
 	return inv_dt * m_impulse.z;
+}
+
+void b2XformWeldJoint::SetTransformB(const b2Mat33& transform)
+{
+	m_transformAtoB = transform;
+	transform.GetInverse33(&m_transformBtoA);
+}
+
+void b2XformWeldJoint::SetTransformBRot(const b2Vec2& transform)
+{
+	m_rotateAtoB = transform;
+	if (transform.x != 0.0f)
+	{
+		m_rotateBtoA.x = 1.0f / transform.x;
+		m_rotateBtoA.y = -transform.y / transform.x;
+	}
+	else
+	{
+		m_rotateBtoA.x = 0.0f;
+		m_rotateBtoA.y = -transform.y;
+	}
 }
 
 void b2XformWeldJoint::Dump()

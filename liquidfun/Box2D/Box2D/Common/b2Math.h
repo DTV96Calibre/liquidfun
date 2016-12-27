@@ -620,6 +620,12 @@ inline b2Vec2 b2Mul22(const b2Mat33& A, const b2Vec2& v)
 	return b2Vec2(A.ex.x * v.x + A.ey.x * v.y, A.ex.y * v.x + A.ey.y * v.y);
 }
 
+/// Multiply a matrix times a vector, as if the vector were (x, y, 1).
+inline b2Vec2 b2Mul33(const b2Mat33& A, const b2Vec2& v)
+{
+	return b2Vec2(A.ex.x * v.x + A.ey.x * v.y + A.ez.x, A.ex.y * v.x + A.ey.y * v.y + A.ez.y);
+}
+
 /// Multiply two rotations: q * r
 inline b2Rot b2Mul(const b2Rot& q, const b2Rot& r)
 {
