@@ -353,6 +353,10 @@ struct b2Mat33
 	/// Returns the zero matrix if singular.
 	void GetSymInverse33(b2Mat33* M) const;
 
+	/// Get the inverse of this matrix as a 3-by-3.
+	/// Returns the zero matrix if singular.
+	void GetInverse33(b2Mat33* M) const;
+
 	b2Vec3 ex, ey, ez;
 };
 

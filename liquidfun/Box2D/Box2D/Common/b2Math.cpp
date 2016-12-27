@@ -92,3 +92,29 @@ void b2Mat33::GetSymInverse33(b2Mat33* M) const
 	M->ez.y = M->ey.z;
 	M->ez.z = det * (a11 * a22 - a12 * a12);
 }
+
+/// Returns the zero matrix if singular.
+void b2Mat33::GetInverse33(b2Mat33* M) const
+{
+	float32 A = (ey.y*ez.z - ez.y*ey.z);
+	float32 B = -(ex.y*ez.z - ez.y*ex.z);
+	float32 C = (ex.y*ey.z - ey.y*ex.z);
+
+	float32 det = ex.x*A + ey.x*B + ez.x*C;
+	if (det != 0.0f)
+	{
+		det = 1.0f / det;
+	}
+
+	M->ex.x = det * A;
+	M->ex.y = det * B;
+	M->ex.z = det * C;
+
+	M->ey.x = det * -(ey.x*ez.z - ez.x*ey.z);
+	M->ey.y = det * (ex.x*ez.z - ez.x*ex.z);
+	M->ey.z = det * -(ex.x*ey.z - ey.x*ex.z);
+
+	M->ez.x = det * (ey.x*ez.y - ez.x*ey.y);
+	M->ez.y = det * -(ex.x*ez.y - ez.x*ex.y);
+	M->ez.z = det * (ex.x*ey.y - ey.x*ex.y);
+}
