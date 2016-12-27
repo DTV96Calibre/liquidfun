@@ -6,7 +6,11 @@ void* b2XformWeldJointDef_Create(
     // weld joint def
     double dampingRatio, double frequencyHz, double localAnchorAx,
     double localAnchorAy, double localAnchorBx, double localAnchorBy,
-    double referenceAngle) {
+    double referenceAngle,
+    // transform
+    double transformB_a, double transformB_b, double transformB_c,
+    double transformB_d, double transformB_e, double transformB_f,
+    double transformB_g, double transformB_h, double transformB_i) {
   b2XformWeldJointDef def;
   def.bodyA = (b2Body*)bodyA;
   def.bodyB = (b2Body*)bodyB;
@@ -17,6 +21,10 @@ void* b2XformWeldJointDef_Create(
   def.localAnchorA = b2Vec2(localAnchorAx, localAnchorAy);
   def.localAnchorB = b2Vec2(localAnchorBx, localAnchorBy);
   def.referenceAngle = referenceAngle;
+  
+  def.transformB.ex = b2Vec3(transformB_a, transformB_b, transformB_c);
+  def.transformB.ey = b2Vec3(transformB_d, transformB_e, transformB_f);
+  def.transformB.ez = b2Vec3(transformB_g, transformB_h, transformB_i);
 
   return ((b2World*)world)->CreateJoint(&def);
 }

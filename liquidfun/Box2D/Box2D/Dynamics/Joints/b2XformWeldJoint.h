@@ -51,6 +51,9 @@ struct b2XformWeldJointDef : public b2JointDef
 
 	/// The damping ratio. 0 = no damping, 1 = critical damping.
 	float32 dampingRatio;
+	
+	/// The transformation to convert from bodyA's origin to bodyB's origin.
+	b2Mat33 transformB;
 };
 
 /// A weld joint essentially glues two bodies together. A weld joint may
@@ -80,6 +83,10 @@ public:
 	/// Set/get damping ratio.
 	void SetDampingRatio(float32 ratio) { m_dampingRatio = ratio; }
 	float32 GetDampingRatio() const { return m_dampingRatio; }
+	
+	/// Set/get transform matrices.
+	void SetTransformB(const b2Mat33& transform) { m_transformAtoB = transform; transform.GetInverse33(&m_transformBtoA); }
+	const b2Mat33& GetTransformB() const { return m_transformAtoB; }
 
 	/// Dump to b2Log
 	void Dump();
@@ -104,6 +111,8 @@ protected:
 	float32 m_referenceAngle;
 	float32 m_gamma;
 	b2Vec3 m_impulse;
+	b2Mat33 m_transformAtoB;
+	b2Mat33 m_transformBtoA;
 
 	// Solver temp
 	int32 m_indexA;

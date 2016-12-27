@@ -44,6 +44,7 @@ b2XformWeldJoint::b2XformWeldJoint(const b2XformWeldJointDef* def)
 	m_dampingRatio = def->dampingRatio;
 
 	m_impulse.SetZero();
+	SetTransformB(def->transformB);
 }
 
 void b2XformWeldJoint::InitVelocityConstraints(const b2SolverData& data)

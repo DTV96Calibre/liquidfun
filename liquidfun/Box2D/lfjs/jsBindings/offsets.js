@@ -91,5 +91,8 @@ var Offsets = {
   },
   b2World: {
     bodyList: 102960
+  },
+  b2XformWeldJoint: {
+    transformB: 116
   }
 };

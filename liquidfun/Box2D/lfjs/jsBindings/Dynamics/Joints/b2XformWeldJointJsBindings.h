@@ -9,7 +9,11 @@ void* b2XformWeldJointDef_Create(
     // weld joint def
     double dampingRatio, double frequencyHz, double localAnchorAx,
     double localAnchorAy, double localAnchorBx, double localAnchorBy,
-    double referenceAngle);
+    double referenceAngle,
+    // transform
+    double transformB_a, double transformB_b, double transformB_c,
+    double transformB_d, double transformB_e, double transformB_f,
+    double transformB_g, double transformB_h, double transformB_i);
 }
 
 #endif
