@@ -30,9 +30,9 @@ java -jar $CLOSURE_JAR --language_in ECMASCRIPT5 \
 ./jsBindings/Particle/b2ParticleSystem.js \
 ./jsBindings/Particle/b2ParticleGroup.js \
 ./jsBindings/Particle/b2Particle.js \
---js_output_file bindings.js
+--js_output_file min_bindings.js
 java -jar $CLOSURE_JAR --language_in ECMASCRIPT5 \
 --compilation_level WHITESPACE_ONLY \
 ./lf_core.js \
-./bindings.js \
+./min_bindings.js \
 --js_output_file liquidfun.js
