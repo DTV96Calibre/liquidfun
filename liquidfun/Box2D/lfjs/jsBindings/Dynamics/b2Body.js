@@ -132,6 +132,7 @@ b2Body.prototype.CreateFixtureFromShape = function(shape, density) {
 b2Body.prototype.DestroyFixture = function(fixture) {
   b2Body_DestroyFixture(this.ptr, fixture.ptr);
   b2World._RemoveItem(fixture, this.fixtures);
+  delete this.world.fixturesLookup[fixture.ptr];
 };
 
 b2Body.prototype.GetAngle = function() {

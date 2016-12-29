@@ -162,6 +162,7 @@ b2World.prototype.CreateParticleSystem = function(psd) {
 b2World.prototype.DestroyBody = function(body) {
   b2World_DestroyBody(this.ptr, body.ptr);
   b2World._RemoveItem(body, this.bodies);
+  delete this.bodiesLookup[body.ptr];
 };
 
 b2World.prototype.DestroyJoint = function(joint) {
