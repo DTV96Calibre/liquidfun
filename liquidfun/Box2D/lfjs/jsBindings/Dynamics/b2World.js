@@ -115,13 +115,12 @@ b2World._Push = function(item, list) {
 };
 
 b2World._RemoveItem = function(item, list) {
-  var length = list.length;
-  var lindex = item.lindex;
-  if (length > 1) {
-    list[lindex] = list[length - 1];
-    list[lindex].lindex = lindex;
+  var i = item.lindex;
+  list.splice(i, 1);
+  for (; i < list.length; i++)
+  {
+    list[i].lindex = i;
   }
-  list.pop();
 };
 
 b2World.prototype.CreateBody = function(bodyDef) {
