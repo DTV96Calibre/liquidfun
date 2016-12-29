@@ -124,8 +124,7 @@ B2FRICTIONJOINT = \
 
 B2GEARJOINT = \
 	'_b2GearJoint_GetRatio', \
-	'_b2GearJointDef_Create', \
-	'_b2GearJointDef_InitializeAndCreate'
+	'_b2GearJointDef_Create'
 
 B2JOINT = \
 	'_b2Joint_GetBodyA', \
@@ -257,4 +256,4 @@ EXPORTS = EXPORTED_FUNCTIONS="[ \
 	]"
 
 bindings.js:
-	$(EMSCRIPTEN)/emcc -I../ -o lf_core.js jsBindings/jsBindings.cpp $(OBJECTS) -s $(EXPORTS) -s TOTAL_MEMORY=33554432 -O2 --js-library callbacks.js --memory-init-file 0
+	$(EMSCRIPTEN)/emcc -I../ --bind -o lf_core.js jsBindings/jsBindings.cpp $(OBJECTS) -s $(EXPORTS) -s TOTAL_MEMORY=33554432 -O2 --js-library callbacks.js --memory-init-file 0

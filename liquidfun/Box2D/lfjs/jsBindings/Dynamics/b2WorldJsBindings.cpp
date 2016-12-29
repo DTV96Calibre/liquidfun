@@ -1,6 +1,8 @@
 #include <Box2D/Box2D.h>
 #include <stdio.h>
 #include <emscripten.h>
+#include <emscripten/val.h>
+#include <emscripten/bind.h>
 
 extern "C" {
   extern void b2WorldBeginContactBody(void* contactPtr);
@@ -57,9 +59,103 @@ class RayCastCallback : public b2RayCastCallback {
 
 RayCastCallback rayCastCallback;
 
+class b2WorldDestructionListener : public b2DestructionListener
+{
+public:
+	b2WorldDestructionListener(emscripten::val jsListener) : jsListener(jsListener)
+	{
+	}
+	
+	void SayGoodbye(b2Joint* joint)
+	{
+		if (jsListener.hasOwnProperty("SayGoodbyeJoint"))
+		{
+			jsListener.call<void>("SayGoodbyeJoint", (uintptr_t)joint);
+		}
+	}
+
+	void SayGoodbye(b2Fixture* fixture)
+	{
+		if (jsListener.hasOwnProperty("SayGoodbyeFixture"))
+		{
+			jsListener.call<void>("SayGoodbyeFixture", (uintptr_t)fixture);
+		}
+	}
+
+	void SayGoodbye(b2ParticleGroup* group)
+	{
+		if (jsListener.hasOwnProperty("SayGoodbyeParticleGroup"))
+		{
+			jsListener.call<void>("SayGoodbyeParticleGroup", (uintptr_t)group);
+		}
+	}
+
+	void SayGoodbye(b2ParticleSystem* particleSystem, int32 index)
+	{
+		if (jsListener.hasOwnProperty("SayGoodbyeParticle"))
+		{
+			jsListener.call<void>("SayGoodbyeParticle", (uintptr_t)particleSystem, index);
+		}
+	}
+	
+	void SetJsListener(emscripten::val jsListener)
+	{
+		this->jsListener = jsListener;
+	}
+
+private:
+	emscripten::val jsListener;
+};
+
+// Internal class (extends b2World with additional data for JS callbacks)
+class JSb2World : public b2World
+{
+public:
+	JSb2World(const b2Vec2& gravity) : b2World(gravity)
+	{
+		destructionListener = NULL;
+	}
+
+	~JSb2World()
+	{
+		if (destructionListener)
+		{
+			delete destructionListener;
+		}
+	}
+	
+	void SetJsDestructionListener(emscripten::val jsListener)
+	{
+		if (!jsListener.equals(emscripten::val::null()))
+		{
+			if (!destructionListener)
+			{
+				destructionListener = new b2WorldDestructionListener(jsListener);
+				SetDestructionListener(destructionListener);
+			}
+			else
+			{
+				destructionListener->SetJsListener(jsListener);
+			}
+		}
+		else
+		{
+			if (destructionListener)
+			{
+				SetDestructionListener(NULL);
+				delete destructionListener;
+				destructionListener = NULL;
+			}
+		}
+	}
+	
+private:
+	b2WorldDestructionListener* destructionListener;
+};
+
 // b2World Exports
 void* b2World_Create(double x, double y) {
-  return new b2World(b2Vec2(x, y));
+  return new JSb2World(b2Vec2(x, y));
 }
 
 void* b2World_CreateBody(
@@ -117,7 +213,7 @@ void* b2World_CreateParticleSystem(
 }
 
 void b2World_Delete(void* world) {
-  delete (b2World*)world;
+  delete (JSb2World*)world;
 }
 
 void b2World_DestroyBody(void* world, void* body) {
@@ -150,10 +246,18 @@ void b2World_SetContactListener(void* world) {
   ((b2World*)world)->SetContactListener(&listener);
 }
 
+void b2World_SetDestructionListener(uintptr_t world, emscripten::val jsListener) {
+  ((JSb2World*)world)->SetJsDestructionListener(jsListener);
+}
+
 void b2World_SetGravity(void* world, double x, double y) {
   ((b2World*)world)->SetGravity(b2Vec2(x, y));
 }
 
 void b2World_Step(void* world, float step, float vIterations, float pIterations) {
   ((b2World*)world)->Step(step, (int32)vIterations, (int32)pIterations, 3);
+}
+
+EMSCRIPTEN_BINDINGS(b2World) {
+	function("b2World_SetDestructionListener", &b2World_SetDestructionListener, emscripten::allow_raw_pointers());
 }

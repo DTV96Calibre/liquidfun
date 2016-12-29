@@ -90,8 +90,10 @@ function b2World(gravity) {
   this.bodies = [];
   this.bodiesLookup = {};
   this.fixturesLookup = {};
+  this.jointsLookup = {};
   this.joints = [];
   this.listener = null;
+  this.destructionListener = null;
   this.particleSystems = [];
   this.ptr = b2World_Create(gravity.x, gravity.y);
   this.queryAABBCallback = null;
@@ -107,6 +109,32 @@ function b2World(gravity) {
   nDataBytes = 2 * Float32Array.BYTES_PER_ELEMENT;
   dataPtr = Module._malloc(nDataBytes);
   _vec2Buf = new Uint8Array(Module.HEAPU8.buffer, dataPtr, nDataBytes);
+  
+  Module.b2World_SetDestructionListener(this.ptr, {SayGoodbyeJoint: function(ptr)
+  {
+    var joint = this.jointsLookup[ptr];
+    if (joint)
+    {
+      if (this.destructionListener && this.destructionListener.SayGoodbyeJoint)
+      {
+        this.destructionListener.SayGoodbyeJoint(joint);
+      }
+      b2World._RemoveItem(joint, this.joints);
+      delete this.jointsLookup[ptr];
+    }
+  }.bind(this), SayGoodbyeFixture: function(ptr)
+  {
+    var fix = this.fixturesLookup[ptr];
+    if (fix)
+    {
+      if (this.destructionListener && this.destructionListener.SayGoodbyeFixture)
+      {
+        this.destructionListener.SayGoodbyeFixture(joint);
+      }
+      b2World._RemoveItem(fix, fix.body.fixtures);
+      delete this.fixturesLookup[ptr];
+    }
+  }.bind(this)});
 }
 
 b2World._Push = function(item, list) {
@@ -116,10 +144,25 @@ b2World._Push = function(item, list) {
 
 b2World._RemoveItem = function(item, list) {
   var i = item.lindex;
-  list.splice(i, 1);
-  for (; i < list.length; i++)
+  if (list[i] === item)
   {
-    list[i].lindex = i;
+    list.splice(i, 1);
+    for (; i < list.length; i++)
+    {
+      list[i].lindex = i;
+    }
+  }
+  else
+  {
+    for (i = 0; i < list.length; i++)
+    {
+      list[i].lindex = i;
+      if (list[i] === item)
+      {
+        list.splice(i, 1);
+      }
+    }
+    console.log("Warning: b2World internal list index corruption has been repaired!");
   }
 };
 
@@ -141,6 +184,7 @@ b2World.prototype.CreateBody = function(bodyDef) {
 b2World.prototype.CreateJoint = function(jointDef) {
   var joint = jointDef.Create(this);
   b2World._Push(joint, this.joints);
+  this.jointsLookup[joint.ptr] = joint;
   return joint;
 };
 
@@ -168,6 +212,7 @@ b2World.prototype.DestroyBody = function(body) {
 b2World.prototype.DestroyJoint = function(joint) {
   b2World_DestroyJoint(this.ptr, joint.ptr);
   b2World._RemoveItem(joint, this.joints);
+  delete this.jointsLookup[joint.ptr];
 };
 
 b2World.prototype.DestroyParticleSystem = function(particleSystem) {
